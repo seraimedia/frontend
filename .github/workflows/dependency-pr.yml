@@ -1,0 +1,27 @@
+name: Dependency PR CI
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  dependency-check:
+    name: Run tests for dependency PRs
+    runs-on: ubuntu-latest
+    if: |
+      github.actor == 'dependabot[bot]' || contains(github.event.pull_request.user.login, 'dependabot')
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.x'
+          cache: 'npm'
+
+      - name: Install
+        run: npm ci
+
+      - name: Run tests
+        run: npm test --if-present
