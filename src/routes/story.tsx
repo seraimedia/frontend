@@ -116,7 +116,8 @@ function StoryPage() {
         ))}
 
         <p className="mt-2 text-xs leading-relaxed text-muted-foreground/70">
-          Serai Media was founded in 2025, formerly operating as Content Crafts Digital.
+          Serai Media was founded in 2025, formerly operating as Content Crafts
+          Digital.
         </p>
 
         <Reveal>

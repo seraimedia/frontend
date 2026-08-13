@@ -15,7 +15,9 @@ export function Footer() {
             <img src={iconImage} alt="SERAI icon" className="h-10 w-auto" />
           </div>
           <div>
-            <p className="text-[0.68rem] tracking-[0.2em] text-white/45 uppercase">Pages</p>
+            <p className="text-[0.68rem] tracking-[0.2em] text-white/45 uppercase">
+              Pages
+            </p>
             <ul className="mt-4 space-y-2 text-sm text-white/75">
               <li>
                 <Link to="/story" className="link-underline">
@@ -36,10 +38,15 @@ export function Footer() {
             </ul>
           </div>
           <div>
-            <p className="text-[0.68rem] tracking-[0.2em] text-white/45 uppercase">Contact</p>
+            <p className="text-[0.68rem] tracking-[0.2em] text-white/45 uppercase">
+              Contact
+            </p>
             <ul className="mt-4 space-y-2 text-sm text-white/75">
               <li>
-                <a href="mailto:hello@seraimedia.com" className="link-underline">
+                <a
+                  href="mailto:hello@seraimedia.com"
+                  className="link-underline"
+                >
                   hello@seraimedia.com
                 </a>
               </li>

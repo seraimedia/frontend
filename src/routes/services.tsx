@@ -46,7 +46,9 @@ function ServicesPage() {
                 <h2 className="font-display mt-4 text-[clamp(1.8rem,3.4vw,2.75rem)] leading-[1.08]">
                   {s.name}
                 </h2>
-                <p className="mt-4 max-w-[26ch] text-sm text-muted-foreground">{s.short}</p>
+                <p className="mt-4 max-w-[26ch] text-sm text-muted-foreground">
+                  {s.short}
+                </p>
               </div>
             </Reveal>
 
@@ -63,7 +65,9 @@ function ServicesPage() {
                 <div className="mt-8 grid gap-8 bg-secondary/60 p-7 sm:grid-cols-[0.9fr_1.1fr] md:p-9">
                   <div>
                     <p className="eyebrow">Outcome</p>
-                    <p className="mt-3 max-w-[28ch] text-base leading-relaxed">{s.outcome}</p>
+                    <p className="mt-3 max-w-[28ch] text-base leading-relaxed">
+                      {s.outcome}
+                    </p>
                   </div>
                   <div>
                     <p className="eyebrow">Included</p>
@@ -97,8 +101,8 @@ function ServicesPage() {
         <Reveal>
           <div className="hairline-t flex flex-col gap-6 pt-14 sm:flex-row sm:items-center sm:justify-between">
             <p className="font-display max-w-[24ch] text-2xl md:text-3xl">
-              Not sure which of these you need? That's usually the fractional CMO
-              conversation.
+              Not sure which of these you need? That's usually the fractional
+              CMO conversation.
             </p>
             <Link
               to="/apply"

@@ -19,7 +19,8 @@ export const Route = createFileRoute("/apply")({
       { property: "og:title", content: "Apply — Serai Media" },
       {
         property: "og:description",
-        content: "Apply to work with SERAI. We take on a small number of brands at a time.",
+        content:
+          "Apply to work with SERAI. We take on a small number of brands at a time.",
       },
     ],
   }),
@@ -46,7 +47,12 @@ const EMPTY: Fields = {
   message: "",
 };
 
-const BUDGETS = ["Under $3k / month", "$3k – $5k / month", "$5k – $8k / month", "$10k+ / month"];
+const BUDGETS = [
+  "Under $3k / month",
+  "$3k – $5k / month",
+  "$5k – $8k / month",
+  "$10k+ / month",
+];
 
 const fieldClass =
   "mt-2 w-full border-b border-input bg-transparent pb-3 text-base outline-none transition-colors placeholder:text-muted-foreground/60 focus:border-foreground aria-[invalid=true]:border-destructive";
@@ -54,7 +60,9 @@ const fieldClass =
 // ---- EmailJS config (from .env — see EMAILJS_SETUP.md) ----
 const env = import.meta.env;
 const EMAILJS_SERVICE_ID = env["VITE_EMAILJS_SERVICE_ID"] as string;
-const EMAILJS_ADMIN_TEMPLATE_ID = env["VITE_EMAILJS_ADMIN_TEMPLATE_ID"] as string;
+const EMAILJS_ADMIN_TEMPLATE_ID = env[
+  "VITE_EMAILJS_ADMIN_TEMPLATE_ID"
+] as string;
 const EMAILJS_USER_TEMPLATE_ID = env["VITE_EMAILJS_USER_TEMPLATE_ID"] as string;
 const EMAILJS_PUBLIC_KEY = env["VITE_EMAILJS_PUBLIC_KEY"] as string;
 const ADMIN_EMAIL = (env["VITE_ADMIN_EMAIL"] as string) || "rxasif31@gmail.com";
@@ -68,7 +76,12 @@ function generateInvoiceNumber() {
   return `SRAI-${y}${m}${d}-${rand}`;
 }
 
-function buildVoucherText(values: Fields, invoiceNumber: string, invoiceDate: string, isAdmin: boolean) {
+function buildVoucherText(
+  values: Fields,
+  invoiceNumber: string,
+  invoiceDate: string,
+  isAdmin: boolean,
+) {
   return `
 ┌────────────────────────────────────────────────────────────────────────┐
 │                              SERAI MEDIA                               │
@@ -148,8 +161,18 @@ function ApplyPage() {
       day: "numeric",
     });
 
-    const adminVoucherText = buildVoucherText(values, invoiceNumber, invoiceDate, true);
-    const userVoucherText  = buildVoucherText(values, invoiceNumber, invoiceDate, false);
+    const adminVoucherText = buildVoucherText(
+      values,
+      invoiceNumber,
+      invoiceDate,
+      true,
+    );
+    const userVoucherText = buildVoucherText(
+      values,
+      invoiceNumber,
+      invoiceDate,
+      false,
+    );
 
     const commonParams = {
       invoice_number: invoiceNumber,
@@ -198,7 +221,10 @@ function ApplyPage() {
           { ...commonParams, to_email: ADMIN_EMAIL },
           { publicKey: EMAILJS_PUBLIC_KEY! },
         );
-        if (EMAILJS_USER_TEMPLATE_ID && !isPlaceholder(EMAILJS_USER_TEMPLATE_ID)) {
+        if (
+          EMAILJS_USER_TEMPLATE_ID &&
+          !isPlaceholder(EMAILJS_USER_TEMPLATE_ID)
+        ) {
           try {
             await emailjs.send(
               EMAILJS_SERVICE_ID!,
@@ -206,9 +232,13 @@ function ApplyPage() {
               { ...commonParams, to_email: values.email },
               { publicKey: EMAILJS_PUBLIC_KEY! },
             );
-          } catch { /* user email via EmailJS optional — ignore */ }
+          } catch {
+            /* user email via EmailJS optional — ignore */
+          }
         }
-      } catch { /* EmailJS failed — continue to show success */ }
+      } catch {
+        /* EmailJS failed — continue to show success */
+      }
       setSending(false);
       setSubmitted(true);
       return;
@@ -220,12 +250,15 @@ function ApplyPage() {
     try {
       await fetch(`https://formsubmit.co/ajax/${ADMIN_EMAIL}`, {
         method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
         body: JSON.stringify({
           _subject: `[NEW CLIENT LEAD] ${values.name} (${values.company}) — ${values.service}`,
           _template: "table",
           _replyto: values.email,
-          _cc: values.email,          // ← CC applicant so they also receive confirmation
+          _cc: values.email, // ← CC applicant so they also receive confirmation
           "ADMIN ACTION": `Reply to ${values.name} at ${values.email} within 2 business days.`,
           "Application Ref #": invoiceNumber,
           "Submission Date": invoiceDate,
@@ -257,8 +290,9 @@ function ApplyPage() {
             Thank you, {values.name.split(" ")[0]}.
           </h1>
           <p className="mt-7 max-w-[48ch] text-base leading-relaxed text-muted-foreground">
-            We read every application ourselves. If there's a fit, you'll hear from us within two
-            business days at {values.email}. A confirmation has also been sent to your inbox.
+            We read every application ourselves. If there's a fit, you'll hear
+            from us within two business days at {values.email}. A confirmation
+            has also been sent to your inbox.
           </p>
           <div className="mt-10 flex flex-wrap items-center gap-5">
             <Link
@@ -301,15 +335,18 @@ function ApplyPage() {
             <p className="eyebrow">The application</p>
 
             <div className="mt-8 max-w-[34ch]">
-              <p className="text-sm leading-relaxed text-muted-foreground">Hi there:</p>
+              <p className="text-sm leading-relaxed text-muted-foreground">
+                Hi there:
+              </p>
               <p className="mt-4 text-base leading-relaxed">
-                You've ARRIVED. Kudos on taking the first step towards making your already excellent
-                service/product a step further.
+                You've ARRIVED. Kudos on taking the first step towards making
+                your already excellent service/product a step further.
               </p>
               <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-                This call will be a direct conversation about your brand – where it stands, where it
-                could go, and whether Serai Media is the right partner to get you there. No deck, no
-                pitch. Bring what's unresolved, and we'll leave with a clear next step.
+                This call will be a direct conversation about your brand – where
+                it stands, where it could go, and whether Serai Media is the
+                right partner to get you there. No deck, no pitch. Bring what's
+                unresolved, and we'll leave with a clear next step.
               </p>
               <p className="mt-6 text-sm leading-relaxed">See you then!</p>
               <p className="mt-6 text-sm">
@@ -401,7 +438,9 @@ function ApplyPage() {
                 })}
               </div>
               {errors.service ? (
-                <p className="mt-3 text-xs text-destructive">{errors.service}</p>
+                <p className="mt-3 text-xs text-destructive">
+                  {errors.service}
+                </p>
               ) : null}
             </fieldset>
 
@@ -450,7 +489,9 @@ function ApplyPage() {
               ) : null}
             </div>
 
-            {sendError ? <p className="text-xs text-destructive">{sendError}</p> : null}
+            {sendError ? (
+              <p className="text-xs text-destructive">{sendError}</p>
+            ) : null}
 
             <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
               <button

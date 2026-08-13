@@ -2,12 +2,19 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Reveal } from "@/components/site/Reveal";
 import { SeraiLine } from "@/components/site/SeraiLine";
-import { SERVICES, PROOF_STATS, DISQUALIFIERS } from "@/components/site/content";
+import {
+  SERVICES,
+  PROOF_STATS,
+  DISQUALIFIERS,
+} from "@/components/site/content";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Serai Media — Marketing for products that already deserve attention" },
+      {
+        title:
+          "Serai Media — Marketing for products that already deserve attention",
+      },
       {
         name: "description",
         content:
@@ -15,7 +22,8 @@ export const Route = createFileRoute("/")({
       },
       {
         property: "og:title",
-        content: "Serai Media — Marketing for products that already deserve attention",
+        content:
+          "Serai Media — Marketing for products that already deserve attention",
       },
       {
         property: "og:description",
@@ -35,7 +43,9 @@ function Home() {
         <div className="mx-auto max-w-[88rem]">
           <div className="grid gap-14 lg:grid-cols-[1.15fr_0.85fr] lg:items-end">
             <div>
-              <p className="eyebrow animate-rise">Marketing agency — Austin, TX</p>
+              <p className="eyebrow animate-rise">
+                Marketing agency — Austin, TX
+              </p>
               <h1 className="font-display animate-rise mt-7 max-w-[16ch] text-[clamp(2.6rem,7vw,5.6rem)] leading-[1.02]">
                 Your product is already excellent.
                 <span className="block text-muted-foreground">
@@ -60,8 +70,9 @@ function Home() {
             </div>
 
             <p className="max-w-[42ch] text-base leading-relaxed text-muted-foreground lg:pb-3">
-              We work with a limited number companies whose service/product speaks for itself and
-              whose growth is limited by how few people know it. We close that gap.
+              We work with a limited number companies whose service/product
+              speaks for itself and whose growth is limited by how few people
+              know it. We close that gap.
             </p>
           </div>
         </div>
@@ -83,7 +94,9 @@ function Home() {
                 className="min-w-[62%] shrink-0 snap-start border-r border-hairline py-10 pr-8 last:border-r-0 sm:min-w-[40%] md:min-w-0 md:px-8 md:py-14 md:first:pl-0"
               >
                 <p className="font-display text-4xl md:text-5xl">{s.value}</p>
-                <p className="mt-3 max-w-[24ch] text-sm text-muted-foreground">{s.label}</p>
+                <p className="mt-3 max-w-[24ch] text-sm text-muted-foreground">
+                  {s.label}
+                </p>
               </Reveal>
             ))}
           </ul>
@@ -115,7 +128,12 @@ function Home() {
 
         <ul className="mt-14 grid gap-px border border-hairline bg-hairline sm:grid-cols-2 lg:grid-cols-3">
           {SERVICES.map((s, i) => (
-            <Reveal as="li" key={s.slug} delay={i * 70} className="bg-background">
+            <Reveal
+              as="li"
+              key={s.slug}
+              delay={i * 70}
+              className="bg-background"
+            >
               <Link
                 to="/services"
                 hash={s.slug}
@@ -125,7 +143,9 @@ function Home() {
                   <span className="font-display text-sm text-gold">
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <h3 className="font-display mt-6 text-2xl leading-tight">{s.name}</h3>
+                  <h3 className="font-display mt-6 text-2xl leading-tight">
+                    {s.name}
+                  </h3>
                   <p className="mt-3 max-w-[32ch] text-sm leading-relaxed text-muted-foreground">
                     {s.short}
                   </p>
@@ -148,9 +168,13 @@ function Home() {
         <div className="mx-auto grid max-w-[88rem] gap-12 px-5 py-24 md:px-10 md:py-36 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
           <Reveal>
             <div className="flex min-h-[20rem] h-full flex-col justify-between bg-ink p-8 text-ink-foreground md:min-h-[26rem] md:p-12">
-              <span className="font-display text-5xl leading-none text-gold md:text-7xl">01</span>
+              <span className="font-display text-5xl leading-none text-gold md:text-7xl">
+                01
+              </span>
               <div>
-                <p className="text-[0.68rem] tracking-[0.22em] text-white/45 uppercase">The original network</p>
+                <p className="text-[0.68rem] tracking-[0.22em] text-white/45 uppercase">
+                  The original network
+                </p>
                 <p className="font-display mt-4 max-w-[16ch] text-2xl leading-tight md:text-3xl">
                   Nothing was made there. Everything was made known.
                 </p>
@@ -168,9 +192,10 @@ function Home() {
             </Reveal>
             <Reveal delay={140}>
               <p className="mt-8 max-w-[54ch] text-base leading-relaxed text-muted-foreground">
-                A serai was where travellers stopped on long trade routes — a place where goods,
-                languages and news were exchanged before moving on. It was the original network. It
-                didn't make anything. It made things known.
+                A serai was where travellers stopped on long trade routes — a
+                place where goods, languages and news were exchanged before
+                moving on. It was the original network. It didn't make anything.
+                It made things known.
               </p>
             </Reveal>
             <Reveal delay={200}>
@@ -208,7 +233,9 @@ function Home() {
                 delay={i * 70}
                 className="bg-ink flex items-baseline gap-5 py-5"
               >
-                <span className="text-xs text-white/35">{String(i + 1).padStart(2, "0")}</span>
+                <span className="text-xs text-white/35">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
                 <span className="text-base text-white/80 md:text-lg">{d}</span>
               </Reveal>
             ))}
@@ -229,8 +256,8 @@ function Home() {
           </Reveal>
           <Reveal delay={140}>
             <p className="mx-auto mt-7 max-w-[46ch] text-base leading-relaxed text-muted-foreground">
-              A short application tells us more than a call would. If there's a fit, you'll hear
-              from us within two business days.
+              A short application tells us more than a call would. If there's a
+              fit, you'll hear from us within two business days.
             </p>
           </Reveal>
           <Reveal delay={200}>

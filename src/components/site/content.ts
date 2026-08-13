@@ -12,7 +12,8 @@ export const SERVICES: Service[] = [
     slug: "brand-identity",
     name: "Brand Identity",
     short: "The signal your product already deserves.",
-    outcome: "A coherent brand system that makes quality legible at first glance.",
+    outcome:
+      "A coherent brand system that makes quality legible at first glance.",
     body: [
       "Most companies with an excellent product are not misunderstood because of what they build. They are misunderstood because the surface of the brand does not match the substance underneath it.",
       "We define the positioning, the voice, and the visual system that carry your product into the market without translation loss. Everything is built to be used, not admired in a slide deck.",
@@ -44,7 +45,8 @@ export const SERVICES: Service[] = [
     slug: "influencer-management",
     name: "Influencer Management",
     short: "Borrowed trust, carefully chosen.",
-    outcome: "Partnerships that transfer credibility rather than rent attention.",
+    outcome:
+      "Partnerships that transfer credibility rather than rent attention.",
     body: [
       "Reach is easy to buy. Credibility is not. The wrong partner costs more than the fee — it costs the perception you spent years building.",
       "We source, vet, and manage partners whose audience actually overlaps with your buyer, then structure the collaboration so the work looks native to both brands.",
