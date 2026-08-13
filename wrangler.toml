@@ -1,0 +1,35 @@
+# Starter wrangler.toml — does NOT contain secrets.
+# Account-specific values (account_id, zone_id) will be provided at deploy time
+# by GitHub Actions via secrets (CLOUDFLARE_ACCOUNT_ID, CLOUDFLARE_ZONE_ID).
+# If you prefer, replace the placeholders below with real values.
+
+name = "my-worker"
+main = "src/index.js"
+compatibility_date = "2026-08-13"
+workers_dev = true
+
+# Optional publishing configuration for environments. The workflow can
+# pass account/zone values when running wrangler to avoid committing secrets.
+[env.staging]
+name = "my-worker-staging"
+workers_dev = true
+
+[env.production]
+name = "my-worker"
+# To publish to a route, set "route" and "zone_id" here or pass them via
+# the GitHub Actions workflow (recommended to use secrets).
+# route = "www.example.com/*"
+# zone_id = ""
+
+# Notes:
+# - The cloudflare/wrangler-action in GitHub Actions can be invoked with the
+#   CLOUDFLARE_API_TOKEN secret. If you need to publish to a specific zone or
+#   use an account-scoped operation, pass --account-id and --zone-id in the
+#   action or add them as inputs to the action rather than committing them.
+# - Example workflow snippet (in actions):
+#   - uses: cloudflare/wrangler-action@v2
+#     with:
+#       apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+#       workingDirectory: ./
+#       environment: staging
+#   - run: wrangler publish --env staging --account-id ${{ secrets.CLOUDFLARE_ACCOUNT_ID }} --zone-id ${{ secrets.CLOUDFLARE_ZONE_ID }}
