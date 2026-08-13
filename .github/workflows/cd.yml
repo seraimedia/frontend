@@ -25,12 +25,6 @@ jobs:
         with:
           node-version: "22.x"
 
-      - name: Install Bun (if needed) and add to PATH
-        run: |
-          curl -fsSL https://bun.sh/install | bash || true
-          echo "$HOME/.bun/bin" >> $GITHUB_PATH
-          bun --version || true
-
       - name: Install dependencies (prefer npm lock)
         run: |
           # prefer per-app installs if present
