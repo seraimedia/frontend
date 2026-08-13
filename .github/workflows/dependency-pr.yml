@@ -12,7 +12,7 @@ jobs:
       github.actor == 'dependabot[bot]' || contains(github.event.pull_request.user.login, 'dependabot')
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Use Node.js
         uses: actions/setup-node@v4
