@@ -13,7 +13,7 @@ export const Route = createFileRoute("/")({
     meta: [
       {
         title:
-          "Serai Media — Social first branch marketing for products that deserves attention",
+          "Serai Media — Social first brand marketing for products that deserves attention",
       },
       {
         name: "description",
@@ -23,7 +23,7 @@ export const Route = createFileRoute("/")({
       {
         property: "og:title",
         content:
-          "Serai Media — Social first branch marketing for products that deserves attention",
+          "Serai Media — Social first brand marketing for products that deserves attention",
       },
       {
         property: "og:description",
