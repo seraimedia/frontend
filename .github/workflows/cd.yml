@@ -13,30 +13,88 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          persist-credentials: true
 
       - name: Use Node.js
         uses: actions/setup-node@v7
         with:
           node-version: "22.x"
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Install Bun (if needed) and add to PATH
+        run: |
+          curl -fsSL https://bun.sh/install | bash || true
+          echo "$HOME/.bun/bin" >> $GITHUB_PATH
+          bun --version || true
+
+      - name: Regenerate bun lockfiles (apps and root)
+        run: |
+          set -e
+          for d in . ./apps/*; do
+            if [ -f "$d/package.json" ]; then
+              echo "Regenerating bun lock in $d"
+              (cd "$d" && bun install --no-save) || true
+            fi
+          done
+
+      - name: Regenerate npm lockfiles (apps and root)
+        run: |
+          set -e
+          for d in . ./apps/*; do
+            if [ -f "$d/package.json" ]; then
+              echo "Regenerating npm lock in $d"
+              (cd "$d" && npm install --package-lock-only --ignore-scripts) || true
+            fi
+          done
+
+      - name: Commit regenerated lockfiles
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if ! git diff --staged --quiet; then
+            git commit -m "chore: regenerate lockfiles (bun & npm) [ci skip]" || true
+            git push origin HEAD:refs/heads/main || true
+          else
+            echo "No lockfile changes"
+          fi
+
+      - name: Install dependencies (npm)
+        run: |
+          if [ -f ./apps/backend/package.json ]; then
+            cd ./apps/backend
+            npm ci
+            cd -
+          else
+            npm ci
+          fi
 
       - name: Build
         run: npm run build --if-present
 
-      - name: Deploy to Cloudflare Workers (staging)
+      - name: Deploy to Cloudflare Workers (staging) via action
         if: ${{ secrets.CLOUDFLARE_API_TOKEN != '' }}
         uses: cloudflare/wrangler-action@v2
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          workingDirectory: ./
+          workingDirectory: ./apps/backend
           environment: staging
+          command: publish --env staging
 
-      - name: Publish with wrangler (staging)
-        if: ${{ secrets.CLOUDFLARE_ACCOUNT_ID != '' && secrets.CLOUDFLARE_ZONE_ID != '' }}
+      - name: Fallback: Publish with wrangler CLI (staging)
+        if: ${{ secrets.CLOUDFLARE_API_TOKEN != '' }}
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
         run: |
-          wrangler publish --env staging --account-id ${{ secrets.CLOUDFLARE_ACCOUNT_ID }} --zone-id ${{ secrets.CLOUDFLARE_ZONE_ID }}
+          if command -v wrangler >/dev/null 2>&1; then
+            (cd apps/backend && wrangler publish --env staging)
+          else
+            echo "wrangler not present; skipping fallback"
+          fi
 
   deploy-production:
     if: github.event_name == 'release'
@@ -44,27 +102,85 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          persist-credentials: true
 
       - name: Use Node.js
         uses: actions/setup-node@v7
         with:
           node-version: "22.x"
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Install Bun (if needed) and add to PATH
+        run: |
+          curl -fsSL https://bun.sh/install | bash || true
+          echo "$HOME/.bun/bin" >> $GITHUB_PATH
+          bun --version || true
+
+      - name: Regenerate bun lockfiles (apps and root)
+        run: |
+          set -e
+          for d in . ./apps/*; do
+            if [ -f "$d/package.json" ]; then
+              echo "Regenerating bun lock in $d"
+              (cd "$d" && bun install --no-save) || true
+            fi
+          done
+
+      - name: Regenerate npm lockfiles (apps and root)
+        run: |
+          set -e
+          for d in . ./apps/*; do
+            if [ -f "$d/package.json" ]; then
+              echo "Regenerating npm lock in $d"
+              (cd "$d" && npm install --package-lock-only --ignore-scripts) || true
+            fi
+          done
+
+      - name: Commit regenerated lockfiles
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if ! git diff --staged --quiet; then
+            git commit -m "chore: regenerate lockfiles (bun & npm) [ci skip]" || true
+            git push origin HEAD:refs/heads/main || true
+          else
+            echo "No lockfile changes"
+          fi
+
+      - name: Install dependencies (npm)
+        run: |
+          if [ -f ./apps/backend/package.json ]; then
+            cd ./apps/backend
+            npm ci
+            cd -
+          else
+            npm ci
+          fi
 
       - name: Build
         run: npm run build --if-present
 
-      - name: Deploy to Cloudflare Workers (production)
+      - name: Deploy to Cloudflare Workers (production) via action
         if: ${{ secrets.CLOUDFLARE_API_TOKEN != '' }}
         uses: cloudflare/wrangler-action@v2
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          workingDirectory: ./
+          workingDirectory: ./apps/backend
           environment: production
+          command: publish --env production
 
-      - name: Publish with wrangler (production)
-        if: ${{ secrets.CLOUDFLARE_ACCOUNT_ID != '' && secrets.CLOUDFLARE_ZONE_ID != '' }}
+      - name: Fallback: Publish with wrangler CLI (production)
+        if: ${{ secrets.CLOUDFLARE_API_TOKEN != '' }}
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
         run: |
-          wrangler publish --env production --account-id ${{ secrets.CLOUDFLARE_ACCOUNT_ID }} --zone-id ${{ secrets.CLOUDFLARE_ZONE_ID }}
+          if command -v wrangler >/dev/null 2>&1; then
+            (cd apps/backend && wrangler publish --env production)
+          else
+            echo "wrangler not present; skipping fallback"
+          fi
