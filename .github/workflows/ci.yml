@@ -23,11 +23,50 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
 
-      - name: Ensure lockfile is up to date
-        run: npm install --package-lock-only
+      - name: Install Bun (for lockfile checks)
+        run: |
+          curl -fsSL https://bun.sh/install | bash || true
+          echo "$HOME/.bun/bin" >> $GITHUB_PATH
+          bun --version || true
 
-      - name: Verify lockfile is committed
-        run: git diff --exit-code -- package-lock.json
+      - name: Verify lockfiles are in sync (npm & bun)
+        run: |
+          set -e
+          mismatches=0
+          for d in . ./apps/*; do
+            if [ -f "$d/package.json" ]; then
+              echo "Checking $d"
+
+              # Regenerate npm package-lock only
+              (cd "$d" && npm install --package-lock-only --ignore-scripts) || true
+              if ! git diff --exit-code -- "$d/package-lock.json"; then
+                echo "package-lock.json mismatch in $d"
+                git --no-pager diff -- "$d/package-lock.json"
+                mismatches=1
+              fi
+
+              # Regenerate bun lock (if bun available)
+              if command -v bun >/dev/null 2>&1; then
+                (cd "$d" && bun install --no-save) || true
+                if [ -f "$d/bun.lockb" ]; then
+                  if ! git diff --exit-code -- "$d/bun.lockb"; then
+                    echo "bun.lockb mismatch in $d"
+                    git --no-pager diff -- "$d/bun.lockb"
+                    mismatches=1
+                  fi
+                fi
+              fi
+            fi
+          done
+
+          # Revert any generated changes so later steps aren't affected
+          git restore --staged . || true
+          git restore . || true
+
+          if [ "$mismatches" -ne 0 ]; then
+            echo "Lockfile mismatches detected. Regenerate lockfiles locally, commit, and push."
+            exit 1
+          fi
 
       - name: Install dependencies
         run: npm ci

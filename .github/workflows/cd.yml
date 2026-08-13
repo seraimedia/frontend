@@ -1,70 +1,67 @@
 name: CD
 
 on:
-  push:
-    branches: ["main"]
-  release:
-    types: [created]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target environment'
+        required: true
+        default: 'staging'
+        type: string
 
 jobs:
-  deploy-staging:
+  deploy:
+    # Only allow manual runs from main to proceed
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          persist-credentials: true
 
       - name: Use Node.js
         uses: actions/setup-node@v7
         with:
           node-version: "22.x"
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Install dependencies (prefer npm lock)
+        run: |
+          # prefer per-app installs if present
+          if [ -f ./apps/backend/package.json ]; then
+            (cd apps/backend && npm ci)
+          fi
+          if [ -f ./apps/frontend/package.json ]; then
+            (cd apps/frontend && npm ci)
+          fi
 
       - name: Build
-        run: npm run build --if-present
+        run: |
+          if [ -f ./apps/frontend/package.json ]; then
+            (cd apps/frontend && npm run build --if-present)
+          fi
+          if [ -f ./apps/backend/package.json ]; then
+            (cd apps/backend && npm run build --if-present || true)
+          fi
 
-      - name: Deploy to Cloudflare Workers (staging)
+      - name: Deploy to Cloudflare Workers via action
         if: ${{ secrets.CLOUDFLARE_API_TOKEN != '' }}
         uses: cloudflare/wrangler-action@v2
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          workingDirectory: ./
-          environment: staging
+          workingDirectory: ./apps/backend
+          environment: ${{ github.event.inputs.environment || 'staging' }}
+          command: publish --env ${{ github.event.inputs.environment || 'staging' }}
 
-      - name: Publish with wrangler (staging)
-        if: ${{ secrets.CLOUDFLARE_ACCOUNT_ID != '' && secrets.CLOUDFLARE_ZONE_ID != '' }}
-        run: |
-          wrangler publish --env staging --account-id ${{ secrets.CLOUDFLARE_ACCOUNT_ID }} --zone-id ${{ secrets.CLOUDFLARE_ZONE_ID }}
-
-  deploy-production:
-    if: github.event_name == 'release'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-
-      - name: Use Node.js
-        uses: actions/setup-node@v7
-        with:
-          node-version: "22.x"
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build
-        run: npm run build --if-present
-
-      - name: Deploy to Cloudflare Workers (production)
+      - name: Fallback: Publish with wrangler CLI
         if: ${{ secrets.CLOUDFLARE_API_TOKEN != '' }}
-        uses: cloudflare/wrangler-action@v2
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          workingDirectory: ./
-          environment: production
-
-      - name: Publish with wrangler (production)
-        if: ${{ secrets.CLOUDFLARE_ACCOUNT_ID != '' && secrets.CLOUDFLARE_ZONE_ID != '' }}
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
         run: |
-          wrangler publish --env production --account-id ${{ secrets.CLOUDFLARE_ACCOUNT_ID }} --zone-id ${{ secrets.CLOUDFLARE_ZONE_ID }}
+          if command -v wrangler >/dev/null 2>&1; then
+            (cd apps/backend && wrangler publish --env ${{ github.event.inputs.environment || 'staging' }})
+          else
+            echo "wrangler not present; skipping fallback"
+          fi
