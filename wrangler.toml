@@ -1,25 +1,9 @@
-﻿# Starter wrangler.toml — does NOT contain secrets.
-# Account-specific values (account_id, zone_id) will be provided at deploy time
-# by GitHub Actions via secrets (CLOUDFLARE_ACCOUNT_ID, CLOUDFLARE_ZONE_ID).
-# If you prefer, replace the placeholders below with real values.
+# Minimal wrangler.toml — environment-agnostic (no env blocks)
+# Account-specific values (account_id, zone_id) are provided at deploy time via CI/secrets
 
 name = "my-worker"
 main = "src/index.js"
 compatibility_date = "2026-08-13"
 workers_dev = true
 
-# Environment-specific sections are intentionally omitted to avoid
-# generating redirected configurations that include env blocks.
-# The workflow should pass environment/account/zone values at deploy time
-# via wrangler CLI flags or action inputs.
-
-# Example (do not commit):
-# [env.staging]
-# name = "my-worker-staging"
-# workers_dev = true
-
-# Notes:
-# - The cloudflare/wrangler-action in GitHub Actions can be invoked with the
-#   CLOUDFLARE_API_TOKEN secret. If you need to publish to a specific zone or
-#   use an account-scoped operation, pass --account-id and --zone-id in the
-#   action or add them as inputs to the action rather than committing them.
+# Keep environment-specific config out of the committed file.
