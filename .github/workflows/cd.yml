@@ -51,7 +51,7 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           workingDirectory: ./apps/backend
           environment: ${{ github.event.inputs.environment }}
-                    command: publish --env ${{ github.event.inputs.environment }}
+          command: publish --env ${{ github.event.inputs.environment }}
 
       - name: Fallback: Publish with wrangler CLI
         if: ${{ secrets.CLOUDFLARE_API_TOKEN != '' }}
