@@ -1,0 +1,286 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 2px);
+  --radius-xl: calc(var(--radius) + 6px);
+  --font-display: var(--font-serif-display);
+  --font-sans: var(--font-body);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ink: var(--ink);
+  --color-ink-foreground: var(--ink-foreground);
+  --color-gold: var(--gold);
+  --color-hairline: var(--hairline);
+  --color-ring-offset-background: var(--background);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+:root {
+  --radius: 0.125rem;
+  --font-serif-display: "Playfair Display", "Times New Roman", serif;
+  --font-body: "Inter", system-ui, sans-serif;
+
+  --background: oklch(0.973 0.008 88);
+  --foreground: oklch(0.21 0.008 60);
+  --card: oklch(0.985 0.006 88);
+  --card-foreground: oklch(0.21 0.008 60);
+  --popover: oklch(0.985 0.006 88);
+  --popover-foreground: oklch(0.21 0.008 60);
+  --primary: oklch(0.17 0.006 60);
+  --primary-foreground: oklch(0.975 0.008 88);
+  --secondary: oklch(0.945 0.01 88);
+  --secondary-foreground: oklch(0.21 0.008 60);
+  --muted: oklch(0.945 0.01 88);
+  --muted-foreground: oklch(0.53 0.012 70);
+  --accent: oklch(0.94 0.018 85);
+  --accent-foreground: oklch(0.21 0.008 60);
+  --destructive: oklch(0.52 0.19 27);
+  --destructive-foreground: oklch(0.98 0.005 88);
+  --border: oklch(0.885 0.01 85);
+  --hairline: oklch(0.885 0.01 85);
+  --input: oklch(0.875 0.012 85);
+  --ring: oklch(0.72 0.075 75);
+  --ink: oklch(0.155 0.005 60);
+  --ink-foreground: oklch(0.96 0.008 88);
+  --gold: oklch(0.73 0.13 70);
+  --chart-1: oklch(0.72 0.085 78);
+  --chart-2: oklch(0.53 0.012 70);
+  --chart-3: oklch(0.21 0.008 60);
+  --chart-4: oklch(0.885 0.01 85);
+  --chart-5: oklch(0.945 0.01 88);
+  --sidebar: oklch(0.973 0.008 88);
+  --sidebar-foreground: oklch(0.21 0.008 60);
+  --sidebar-primary: oklch(0.17 0.006 60);
+  --sidebar-primary-foreground: oklch(0.975 0.008 88);
+  --sidebar-accent: oklch(0.945 0.01 88);
+  --sidebar-accent-foreground: oklch(0.21 0.008 60);
+  --sidebar-border: oklch(0.885 0.01 85);
+  --sidebar-ring: oklch(0.72 0.075 75);
+}
+
+.dark {
+  --background: oklch(0.155 0.005 60);
+  --foreground: oklch(0.96 0.008 88);
+  --card: oklch(0.19 0.006 60);
+  --card-foreground: oklch(0.96 0.008 88);
+  --popover: oklch(0.19 0.006 60);
+  --popover-foreground: oklch(0.96 0.008 88);
+  --primary: oklch(0.96 0.008 88);
+  --primary-foreground: oklch(0.155 0.005 60);
+  --secondary: oklch(0.24 0.006 60);
+  --secondary-foreground: oklch(0.96 0.008 88);
+  --muted: oklch(0.24 0.006 60);
+  --muted-foreground: oklch(0.68 0.012 75);
+  --accent: oklch(0.26 0.01 70);
+  --accent-foreground: oklch(0.96 0.008 88);
+  --border: oklch(1 0 0 / 12%);
+  --hairline: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 16%);
+  --ink: oklch(0.96 0.008 88);
+  --ink-foreground: oklch(0.155 0.005 60);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-body);
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: var(--gold);
+    color: var(--ink-foreground);
+  }
+}
+
+@utility font-display {
+  font-family: var(--font-serif-display);
+  font-weight: 500;
+  letter-spacing: -0.015em;
+}
+
+@utility eyebrow {
+  font-size: 0.6875rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+@utility hairline-t {
+  border-top: 1px solid var(--hairline);
+}
+
+@utility link-underline {
+  position: relative;
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    height: 1px;
+    width: 100%;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  &:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+}
+
+/* --- Signature Lifeline v2 animation --- */
+.serai-lifeline svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 12rem;
+}
+
+.serai-lifeline__path {
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 4000;
+  stroke-dashoffset: 4000;
+  animation: serai-lifeline-draw 4.8s ease-in-out infinite;
+}
+
+.serai-lifeline__dot {
+  fill: var(--gold);
+  offset-path: path(
+    "M 30,100 L 140,100 L 172.0,28.0 L 166.8,28.2 L 163.2,29.5 L 161.0,31.6 L 159.9,34.5 L 159.8,38.1 L 160.5,42.2 L 161.7,46.7 L 163.4,51.6 L 165.3,56.8 L 167.2,62.0 L 169.0,67.2 L 170.4,72.4 L 171.3,77.3 L 171.4,81.8 L 170.6,85.9 L 168.7,89.5 L 165.4,92.4 L 160.7,94.5 L 154.3,95.8 L 146.0,96.0 L 146.0,100 L 210,100 L 210.0,26.0 L 210.0,100.0 L 246.0,100.0 L 210.0,100.0 L 210.0,63.0 L 237.0,63.0 L 210.0,63.0 L 210.0,26.0 L 246.0,26.0 L 246.0,100 L 276,100 L 276.0,100.0 L 276.0,26.0 L 298.8,26.0 L 298.8,26.0 L 305.5,27.5 L 311.1,31.6 L 314.4,37.6 L 314.9,44.5 L 312.6,51.0 L 307.7,55.9 L 301.3,58.4 L 294.4,58.0 L 288.3,54.8 L 276.0,58.6 L 289.3,58.6 L 314.0,100.0 L 314.0,100 L 344,100 L 344.0,100.0 L 364.0,26.0 L 384.0,100.0 L 372.8,74.8 L 355.2,74.8 L 355.2,100 L 414,100 L 414.0,26.0 L 430.0,26.0 L 422.0,26.0 L 422.0,100.0 L 414.0,100.0 L 430.0,100.0 L 430.0,100 L 600,100"
+  );
+  offset-rotate: 0deg;
+  animation: serai-lifeline-travel 4.8s ease-in-out infinite;
+}
+
+.serai-lifeline__label {
+  fill: var(--muted-foreground);
+  font-family: var(--font-body);
+  font-size: 13px;
+  letter-spacing: 6px;
+  animation: serai-lifeline-label 4.8s ease-in-out infinite;
+}
+
+@keyframes serai-lifeline-draw {
+  0% {
+    stroke-dashoffset: 4000;
+    opacity: 1;
+  }
+  62.5%,
+  77.08% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  87.5%,
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+}
+
+@keyframes serai-lifeline-travel {
+  0% {
+    offset-distance: 0%;
+    opacity: 1;
+  }
+  62.5%,
+  77.08% {
+    offset-distance: 100%;
+    opacity: 1;
+  }
+  87.5%,
+  100% {
+    offset-distance: 100%;
+    opacity: 0;
+  }
+}
+
+@keyframes serai-lifeline-label {
+  0%,
+  62.5% {
+    opacity: 0;
+  }
+  70.5%,
+  77.08% {
+    opacity: 1;
+  }
+  87.5%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@utility animate-rise {
+  animation: rise-in 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
