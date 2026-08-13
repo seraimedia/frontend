@@ -50,8 +50,8 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           workingDirectory: ./apps/backend
-          environment: ${{ github.event.inputs.environment || 'staging' }}
-          command: publish --env ${{ github.event.inputs.environment || 'staging' }}
+          environment: ${{ github.event.inputs.environment }}
+                    command: publish --env ${{ github.event.inputs.environment }}
 
       - name: Fallback: Publish with wrangler CLI
         if: ${{ secrets.CLOUDFLARE_API_TOKEN != '' }}
@@ -61,7 +61,7 @@ jobs:
           CLOUDFLARE_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
         run: |
           if command -v wrangler >/dev/null 2>&1; then
-            (cd apps/backend && wrangler publish --env ${{ github.event.inputs.environment || 'staging' }})
+            (cd apps/backend && wrangler publish --env ${{ github.event.inputs.environment }})
           else
             echo "wrangler not present; skipping fallback"
           fi
